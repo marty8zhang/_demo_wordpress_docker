@@ -1,0 +1,48 @@
+version: "3.9"
+
+services:
+
+    wordpress:
+        image: wordpress:php8.0
+        restart: always
+        ports:
+            - "8080:80"
+        environment:
+            WORDPRESS_DB_HOST: mariadb
+            WORDPRESS_DB_USER: 'egghdz_user'
+            WORDPRESS_DB_PASSWORD: 'egghdzpassword'
+            WORDPRESS_DB_NAME: 'Egghdz_Database'
+        volumes:
+            - wordpress:/var/www/html
+        depends_on:
+            - mariadb
+
+    mariadb:
+        image: mariadb:latest
+        restart: always
+        volumes:
+            - mariadb:/var/lib/mysql
+        environment:
+            TZ: "UTC"
+            MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+            MYSQL_DATABASE: 'Egghdz_Database'
+            MYSQL_USER: 'egghdz_user'
+            MYSQL_PASSWORD: 'egghdzpassword'
+
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin:latest
+        environment:
+            PMA_HOST: 'mariadb'
+            PMA_USER: 'egghdz_user'
+            PMA_PASSWORD: 'egghdzpassword'
+        restart: always
+        ports:
+            - "81:80"
+        volumes:
+            - /sessions
+        depends_on:
+            - mariadb
+
+volumes:
+    mariadb:
+    wordpress:
