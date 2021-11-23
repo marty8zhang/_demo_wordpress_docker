@@ -1,1 +1,4 @@
 .idea
+__MACOSX
+._.DS_Store
+.env

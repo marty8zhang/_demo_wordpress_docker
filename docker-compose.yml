@@ -5,15 +5,20 @@ services:
     wordpress:
         image: wordpress:php8.0
         restart: always
+        user: "${UID}:${GID}"
         ports:
             - "8080:80"
         environment:
-            WORDPRESS_DB_HOST: mariadb
-            WORDPRESS_DB_USER: 'egghdz_user'
-            WORDPRESS_DB_PASSWORD: 'egghdzpassword'
-            WORDPRESS_DB_NAME: 'Egghdz_Database'
+#            APACHE_RUN_USER: ${UID}
+#            APACHE_RUN_GROUP: ${GID}
+            WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
+            WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
+            WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+            WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
         volumes:
             - wordpress:/var/www/html
+            - ./src/wp-content/plugins:/var/www/html/wp-content/plugins
+            - ./src/wp-content/themes:/var/www/html/wp-content/themes
         depends_on:
             - mariadb
 
@@ -25,16 +30,16 @@ services:
         environment:
             TZ: "UTC"
             MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-            MYSQL_DATABASE: 'Egghdz_Database'
-            MYSQL_USER: 'egghdz_user'
-            MYSQL_PASSWORD: 'egghdzpassword'
+            MYSQL_DATABASE: ${WORDPRESS_DB_NAME}
+            MYSQL_USER: ${WORDPRESS_DB_USER}
+            MYSQL_PASSWORD: ${WORDPRESS_DB_PASSWORD}
 
     phpmyadmin:
         image: phpmyadmin/phpmyadmin:latest
         environment:
-            PMA_HOST: 'mariadb'
-            PMA_USER: 'egghdz_user'
-            PMA_PASSWORD: 'egghdzpassword'
+            PMA_HOST: "mariadb"
+            PMA_USER: ${WORDPRESS_DB_USER}
+            PMA_PASSWORD: ${WORDPRESS_DB_PASSWORD}
         restart: always
         ports:
             - "81:80"
