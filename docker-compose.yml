@@ -3,18 +3,22 @@ version: "3.9"
 services:
 
     wordpress:
-        image: wordpress:php8.0
+        build:
+            context: .
+            args:
+                uid: ${UID:-33}
+                gid: ${GID:-33}
+                http_port: ${HTTP_PORT:-8080}
+        image: egghdz-wordpress-local:php7.4
         restart: always
-        user: "${UID}:${GID}"
         ports:
             - "8080:80"
         environment:
-#            APACHE_RUN_USER: ${UID}
-#            APACHE_RUN_GROUP: ${GID}
             WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
             WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
             WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
             WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
+            WORDPRESS_DEBUG: ${WORDPRESS_DEBUG}
         volumes:
             - wordpress:/var/www/html
             - ./src/wp-content/plugins:/var/www/html/wp-content/plugins
