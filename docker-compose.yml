@@ -5,14 +5,15 @@ services:
     wordpress:
         build:
             context: .
+            dockerfile: Dockerfile.dev
             args:
-                uid: ${UID:-33}
-                gid: ${GID:-33}
-                http_port: ${HTTP_PORT:-8080}
+                uid: ${HOST_UID:-33}
+                gid: ${HOST_GID:-33}
+                http_port: ${HOST_HTTP_PORT:-8080}
         image: egghdz-wordpress-local:php7.4
         restart: always
         ports:
-            - "8080:80"
+            - "${HOST_HTTP_PORT:-8080}:80"
         environment:
             WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
             WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}

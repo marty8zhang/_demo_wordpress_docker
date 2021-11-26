@@ -2,3 +2,4 @@
 __MACOSX
 ._.DS_Store
 .env
+Dockerfile.dev
