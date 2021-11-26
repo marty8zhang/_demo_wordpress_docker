@@ -10,10 +10,11 @@
 
 1. Copy `.env.example` as `.env` and make changes accordingly.
 2. Copy `Dockerfile.dev.example` as `Dockerfile.dev` and make changes accordingly.
-3. 
+3. Start the environment by running:
 ```shell
 $ docker-compose up -d
 ```
+4. Start playing around with WordPress by visiting: http://localhost:8080 (assuming `HOST_HTTP_PORT=8080` in your `.evn`).
 
 ### Stop Local Development Environment
 
@@ -34,4 +35,12 @@ $ docker-compose down
      $ docker volume rm demo_wordpress_docker_wordpress demo_wordpress_docker_mariadb
      ```
 
-3. Remove `src` from your project root. Again, please back up your files accordingly.
+2. Remove `src` from your project root. Again, please back up your files accordingly.
+
+### Customise `php.ini` Directives
+
+[`php.ini` directives](https://www.php.net/manual/en/ini.list.php) can be customised via `configuration/custom.ini`. Check out `Dockerfile.dev.example` to see how this file can be included into a Docker image build.
+
+### PHPMyAdmin
+
+An instance of PHPMyAdmin will also be available at http://localhost:81, after staring up the development environment.

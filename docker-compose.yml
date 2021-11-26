@@ -20,6 +20,8 @@ services:
             WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
             WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
             WORDPRESS_DEBUG: ${WORDPRESS_DEBUG}
+            WORDPRESS_DB_CHARSET: ${WORDPRESS_DB_CHARSET}
+            WORDPRESS_DB_COLLATE: ${WORDPRESS_DB_COLLATE}
         volumes:
             - wordpress:/var/www/html
             - ./src/wp-content/plugins:/var/www/html/wp-content/plugins
