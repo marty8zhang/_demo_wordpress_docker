@@ -41,20 +41,22 @@ services:
             MYSQL_DATABASE: ${WORDPRESS_DB_NAME}
             MYSQL_USER: ${WORDPRESS_DB_USER}
             MYSQL_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+            MYSQL_ROOT_PASSWORD: ${WORDPRESS_DB_PASSWORD}
 
     phpmyadmin:
         image: phpmyadmin/phpmyadmin:latest
         environment:
-            PMA_HOST: "mariadb"
-            PMA_USER: ${WORDPRESS_DB_USER}
+            PMA_HOST: ${WORDPRESS_DB_HOST}
+            PMA_USER: root
             PMA_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+            UPLOAD_LIMIT: 1024M
         restart: always
         ports:
             - "81:80"
         volumes:
             - /sessions
         depends_on:
-            - mariadb
+            - ${WORDPRESS_DB_HOST}
 
 volumes:
     mariadb:

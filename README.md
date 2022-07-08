@@ -13,17 +13,19 @@
 3. Start the environment by running:
 
 ```shell
-$ docker-compose up -d
+$ docker-compose up -d --build wordpress
 ```
 
 4. Start playing around with WordPress by visiting: http://localhost:8080 (assuming `HOST_HTTP_PORT=8080` in
-   your `.evn`).
+   your `.env`).
 
 ### Stop Local Development Environment
 
 ```shell
 $ docker-compose down
 ```
+
+**Note:** DO NOT use `-v` otherwise all your changes in the database will be lost.
 
 ### Refresh from Scratch
 
@@ -48,11 +50,16 @@ Check out `Dockerfile.dev.example` to see how this file can be included into a D
 
 ### PHPMyAdmin
 
-An instance of PHPMyAdmin will also be available at http://localhost:81, after staring up the development environment.
+An instance of PHPMyAdmin can also be spinning up at http://localhost:81 to help to manage the local development
+database:
 
-### Additional Notes
+```shell
+$ docker-compose up -d phpmyadmin
+```
 
-#### Why not use the Docker `user` option?
+## Additional Notes
+
+### Why not use the Docker `user` option?
 
 The `Dockerfile.dev.example` UID/GID workaround is necessary. The common PHP image solution of passing the `user` option
 to Docker (Compose) - mentioned in the "Running as an arbitrary user" section

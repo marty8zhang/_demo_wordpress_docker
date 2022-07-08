@@ -1,5 +1,6 @@
 FROM wordpress:php7.4
 
+# PHP configuration.
 COPY ./configuration/custom.ini $PHP_INI_DIR/conf.d/
 
 # Work around mount volume permission issues.
