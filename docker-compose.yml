@@ -14,6 +14,11 @@ services:
         restart: always
         ports:
             - "${HOST_HTTP_PORT:-8080}:80"
+        volumes:
+            - wordpress:/var/www/html
+            - ./src/wp-content/plugins:/var/www/html/wp-content/plugins
+            - ./src/wp-content/themes:/var/www/html/wp-content/themes
+            - ./src/wp-content/uploads:/var/www/html/wp-content/uploads
         environment:
             WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
             WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
@@ -22,17 +27,18 @@ services:
             WORDPRESS_DEBUG: ${WORDPRESS_DEBUG}
             WORDPRESS_DB_CHARSET: ${WORDPRESS_DB_CHARSET}
             WORDPRESS_DB_COLLATE: ${WORDPRESS_DB_COLLATE}
-        volumes:
-            - wordpress:/var/www/html
-            - ./src/wp-content/plugins:/var/www/html/wp-content/plugins
-            - ./src/wp-content/themes:/var/www/html/wp-content/themes
-            - ./src/wp-content/uploads:/var/www/html/wp-content/uploads
+            WORDPRESS_CONFIG_EXTRA: |
+                define('WP_HOME', "http://{$$_SERVER['SERVER_NAME']}:{$$_SERVER['SERVER_PORT']}/");
+                define('WP_SITEURL', "http://{$$_SERVER['SERVER_NAME']}:{$$_SERVER['SERVER_PORT']}/");
         depends_on:
-            - mariadb
+            - ${WORDPRESS_DB_HOST}
+            - phpmyadmin
 
     mariadb:
         image: mariadb:latest
         restart: always
+        ports:
+            - "13306:3306"
         volumes:
             - mariadb:/var/lib/mysql
         environment:
@@ -45,16 +51,16 @@ services:
 
     phpmyadmin:
         image: phpmyadmin/phpmyadmin:latest
-        environment:
-            PMA_HOST: ${WORDPRESS_DB_HOST}
-            PMA_USER: root
-            PMA_PASSWORD: ${WORDPRESS_DB_PASSWORD}
-            UPLOAD_LIMIT: 1024M
         restart: always
         ports:
             - "81:80"
         volumes:
             - /sessions
+        environment:
+            PMA_HOST: ${WORDPRESS_DB_HOST}
+            PMA_USER: root
+            PMA_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+            UPLOAD_LIMIT: 1024M
         depends_on:
             - ${WORDPRESS_DB_HOST}
 
